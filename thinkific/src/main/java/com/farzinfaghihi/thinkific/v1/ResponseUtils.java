@@ -3,6 +3,8 @@ package com.farzinfaghihi.thinkific.v1;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ResponseUtils {
@@ -15,7 +17,9 @@ public class ResponseUtils {
 
         }
         ResponseErrorDetail responseErrorDetail = new ResponseErrorDetail(errorCode, errorMessage);
-        ResponseError response = new ResponseError(responseErrorDetail);
+        List<ResponseErrorDetail> errors = new ArrayList<>();
+        errors.add(responseErrorDetail);
+        ResponseError response = new ResponseError(errors);
         if (errorCode.equals("404")) {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         } else if (errorCode.equals("400")) {

@@ -1,5 +1,7 @@
 package com.farzinfaghihi.thinkific.v1.integer;
 
+import com.farzinfaghihi.thinkific.v1.user.User;
+import com.farzinfaghihi.thinkific.v1.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +13,18 @@ public class UserIntegerService {
     @Autowired
     UserIntegerDao userIntegerDao;
 
+    @Autowired
+    UserService userService;
+
     public UserInteger getCurrentUserInteger() {
-        // Fetch the latest row in the UserInteger table
-        Optional<UserInteger> currentUserInteger = userIntegerDao.findLatest();
+        User currentUser = userService.getAuthenticatedUser();
+
+        // Fetch the latest row in the UserInteger table for the User
+        Optional<UserInteger> currentUserInteger = userIntegerDao.findLatestForUserId(currentUser.getId());
         // If there are no entries, create a UserInteger with the value 1
         if (currentUserInteger.isEmpty()) {
             UserInteger userInteger = new UserInteger();
+            userInteger.setUser(currentUser);
             userInteger.setValue(1);
             userInteger.setStartingResetValue(1);
             return userIntegerDao.save(userInteger);
@@ -44,6 +52,7 @@ public class UserIntegerService {
         UserInteger currentUserInteger = getCurrentUserInteger();
         if (!currentUserInteger.getValue().equals(resetValue)) {
             UserInteger resetUserInteger = new UserInteger();
+            resetUserInteger.setUser(currentUserInteger.getUser());
             resetUserInteger.setValue(resetValue);
             resetUserInteger.setStartingResetValue(resetValue);
             return userIntegerDao.save(resetUserInteger);

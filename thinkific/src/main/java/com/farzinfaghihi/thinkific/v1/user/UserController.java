@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -38,7 +40,9 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         ResponseErrorDetail responseErrorDetail = new ResponseErrorDetail("400", "A user exists with this email address.");
-        ResponseError response = new ResponseError(responseErrorDetail);
+        List<ResponseErrorDetail> errors = new ArrayList<>();
+        errors.add(responseErrorDetail);
+        ResponseError response = new ResponseError(errors);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

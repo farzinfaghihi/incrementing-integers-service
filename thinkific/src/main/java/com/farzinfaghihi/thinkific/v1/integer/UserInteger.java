@@ -1,6 +1,7 @@
 package com.farzinfaghihi.thinkific.v1.integer;
 
 import com.farzinfaghihi.thinkific.v1.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -12,11 +13,13 @@ public class UserInteger {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 
     private Integer value;
 
+    @JsonIgnore
     private Integer startingResetValue;
 
     // Getters
@@ -24,10 +27,13 @@ public class UserInteger {
         return id;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public Integer getValue() {
         return value;
     }
-
 
     public Integer getStartingResetValue() {
         return startingResetValue;
@@ -37,6 +43,10 @@ public class UserInteger {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setValue(Integer value) {
