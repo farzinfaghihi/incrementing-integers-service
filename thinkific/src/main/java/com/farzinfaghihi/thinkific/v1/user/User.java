@@ -16,6 +16,8 @@ public class User {
 
     private String password;
 
+    // This annotation establishes the relationship to the UserInteger table
+    // The other required annotation is stated in the UserInteger entity
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserInteger> userIntegers;
 

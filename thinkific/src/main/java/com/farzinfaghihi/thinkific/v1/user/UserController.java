@@ -18,6 +18,10 @@ import java.util.Optional;
 @Controller
 public class UserController {
 
+    /**
+     * The Autowired annotation is for using Spring's built in dependency injection,
+     * so we don't have to keep passing around objects in constructors.
+     */
     @Autowired
     UserService userService;
 
@@ -26,8 +30,11 @@ public class UserController {
 
     @PostMapping(value = "/v1/users")
     public ResponseEntity createUser(@RequestBody User user) {
+        // encrypt the password from the user with bcrypt
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Optional<User> createdUser = userService.createUser(user);
+
+        // If a user is successfully created, unwrap the optional and create the apiKey
         if (createdUser.isPresent()) {
             String tokenSubject = createdUser.get().getId().toString();
             // Create a JWT token for the apiKey to be used in Bearer Authorization
@@ -35,10 +42,13 @@ public class UserController {
             String apiKey = JWT.create()
                     .withSubject(tokenSubject)
                     .sign(Algorithm.HMAC512("blueberry".getBytes()));
+
+            // Build the authentication response
             AuthenticationResponse authenticationResponse = new AuthenticationResponse(apiKey);
             ResponseSuccess response = new ResponseSuccess(authenticationResponse);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
+        // Build the error response
         ResponseErrorDetail responseErrorDetail = new ResponseErrorDetail("400", "A user exists with this email address.");
         List<ResponseErrorDetail> errors = new ArrayList<>();
         errors.add(responseErrorDetail);

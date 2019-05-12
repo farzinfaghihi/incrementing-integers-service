@@ -12,7 +12,10 @@ public class UserInteger {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // This annotation establishes the foreign key relationship to the User table
+    // The other required annotation is stated in the User entity
     @ManyToOne
+    // This annotation tells Spring to not return the JSON for UserInteger
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
@@ -20,6 +23,7 @@ public class UserInteger {
     private Integer value;
 
     @JsonIgnore
+    // Used to keep track of the starting value incrementing began from when reset
     private Integer startingResetValue;
 
     // Getters
@@ -40,7 +44,6 @@ public class UserInteger {
     }
 
     // Setters
-
     public void setId(Long id) {
         this.id = id;
     }

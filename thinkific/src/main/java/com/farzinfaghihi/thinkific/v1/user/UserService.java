@@ -22,12 +22,17 @@ public class UserService {
     }
 
     public Optional<User> createUser(User user) {
+        // Only create a new user, if the email does not already exist in the database
         if (!userDao.existsByEmail(user.getEmail())) {
             return Optional.of(userDao.save(user));
         }
         return Optional.empty();
     }
 
+    /**
+     * Get the user currently authenticated within the Spring Security context
+     * @return User
+     */
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (User) authentication.getPrincipal();

@@ -16,14 +16,20 @@ public class UserIntegerService {
     @Autowired
     UserService userService;
 
+    /**
+     * Get the UserInteger for the currently authenticated user. If none exists, create a entry,
+     * with 1 as the default initial value
+     * @return A UserInteger
+     */
     public UserInteger getCurrentUserInteger() {
         User currentUser = userService.getAuthenticatedUser();
 
         // Fetch the latest row in the UserInteger table for the User
         Optional<UserInteger> currentUserInteger = userIntegerDao.findLatestForUserId(currentUser.getId());
         // If there are no entries, create a UserInteger with the value 1
-        if (currentUserInteger.isEmpty()) {
+        if (!currentUserInteger.isPresent()) {
             UserInteger userInteger = new UserInteger();
+            // Set the authenticated user on the UserInteger object, to manage the relationship
             userInteger.setUser(currentUser);
             userInteger.setValue(1);
             userInteger.setStartingResetValue(1);
@@ -32,6 +38,11 @@ public class UserIntegerService {
         return currentUserInteger.get();
     }
 
+    /**
+     * Get the next UserInteger for the currently authenticated user, by incremented the current value by 1,
+     * and updated the entry.
+     * @return
+     */
     public UserInteger getNextUserInteger() {
         // Get the current UserInteger
         UserInteger currentUserInteger = getCurrentUserInteger();
@@ -45,15 +56,17 @@ public class UserIntegerService {
      * This will now be the latest entry grabbed by the getCurrentUserInteger method
      *
      * @param resetValue Integer to create entry for in the UserInteger table
-     * @return UserInteger object
+     * @return A UserInteger
      */
     public UserInteger resetUserInteger(Integer resetValue) {
         // Get the current UserInteger
         UserInteger currentUserInteger = getCurrentUserInteger();
         if (!currentUserInteger.getValue().equals(resetValue)) {
             UserInteger resetUserInteger = new UserInteger();
+            // Set the authenticated user on the UserInteger object, to manage the relationship
             resetUserInteger.setUser(currentUserInteger.getUser());
             resetUserInteger.setValue(resetValue);
+            // Save the reset value, which will not update when we increment the main value
             resetUserInteger.setStartingResetValue(resetValue);
             return userIntegerDao.save(resetUserInteger);
         }

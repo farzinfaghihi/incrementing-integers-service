@@ -16,13 +16,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * A custom filter for validating JWT Tokens passed in for Authorization.
+ * This filter will be a part of the Spring Security chain, which will run the filter
+ * before every endpoint configured with security.
+ */
 public class JWTAuthorizationFilter extends GenericFilterBean {
 
     private UserService userService;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        // Lazily load the user service, as we cannot inject it directly as the filter is ran before Spring sets up all it's dependencies
+        // Lazily load the user service, as we cannot inject it directly as the filter is ran before Spring sets up all dependencies
         if (userService == null) {
             ServletContext servletContext = servletRequest.getServletContext();
             WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
