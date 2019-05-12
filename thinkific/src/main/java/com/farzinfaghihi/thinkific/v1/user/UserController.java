@@ -39,9 +39,13 @@ public class UserController {
             String tokenSubject = createdUser.get().getId().toString();
             // Create a JWT token for the apiKey to be used in Bearer Authorization
             // An expiration is not set as per the requirements, but can easily be added with the withExpiresAt method in the JWT library
+            String secret = System.getProperty("JWT_SECRET");
+            if (secret == null) {
+                secret = System.getenv("JWT_SECRET");
+            }
             String apiKey = JWT.create()
                     .withSubject(tokenSubject)
-                    .sign(Algorithm.HMAC512("blueberry".getBytes()));
+                    .sign(Algorithm.HMAC512(secret.getBytes()));
 
             // Build the authentication response
             AuthenticationResponse authenticationResponse = new AuthenticationResponse(apiKey);

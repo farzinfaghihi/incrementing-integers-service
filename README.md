@@ -21,14 +21,15 @@ This project is written in Java 8, using Spring Boot as the framework for the we
 - Running the application locally
 
 1. To run the application locally, Java and Maven need to be installed 
-2. In Terminal, run java -jar thinkific-0.0.1-SNAPSHOT.jar
+2. Navigate to the root folder where the jar is located
+2. In Terminal, run: java -DJWT_SECRET=insert_secret_here -jar thinkific-0.0.1-SNAPSHOT.jar
 3. The project will run on localhost:8080
 
 - Test the application running on AWS
 
 1. Access the API at http://increment-integer-service.ca-central-1.elasticbeanstalk.com
 
-NOTE: The api is using HTTP (Not HTTPS) due to AWS needing a custom domain for issuing a certificate. The default URL cannot have a certificate assigned for access from a client. Please do not use your actual super secret passwords when making a user.
+NOTE: The api is using HTTP (Not HTTPS) due to AWS Elastic Beanstalk needing a custom domain for issuing a certificate. The default URL cannot have a certificate assigned for access from a client. Please do not use your actual super secret passwords when making a user.
 
 
 *API Documentation*
@@ -53,6 +54,10 @@ GET /v1/current
 GET /v1/next
 
 - Gets the next integer in the sequence
+
+GET /v1/history
+
+- Gets all the values that were used as reset points
 
 
 PUT /v1/current

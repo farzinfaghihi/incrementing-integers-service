@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * The Controller's responsibility is to be the entry point, and leaving point for the API call.
  * The business logic for each API call will be handled within the Service
@@ -35,6 +37,15 @@ public class UserIntegerController {
     public ResponseEntity getNextInteger() {
         UserInteger currentUserInteger = userIntegerService.getNextUserInteger();
         ResponseSuccess response = new ResponseSuccess(currentUserInteger);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/v1/history")
+    public ResponseEntity getResetHistory() {
+        List<Integer> startingResetValues = userIntegerService.getStartingResetValues();
+        IntegerHistory integerHistory = new IntegerHistory();
+        integerHistory.setValues(startingResetValues);
+        ResponseSuccess response = new ResponseSuccess(integerHistory);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -5,6 +5,7 @@ import com.farzinfaghihi.thinkific.v1.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,6 +50,10 @@ public class UserIntegerService {
         // Update the integer value and save
         currentUserInteger.setValue(currentUserInteger.getValue() + 1);
         return userIntegerDao.save(currentUserInteger);
+    }
+
+    public List<Integer> getStartingResetValues() {
+        return userIntegerDao.findAllStartingResetValues();
     }
 
     /**
