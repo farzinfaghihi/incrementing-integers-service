@@ -69,6 +69,6 @@ JSON Body Format (with example values):
 JSON Body Format (with example value):
 
 {
-	value: 200
+	"value": 200
 }
 
