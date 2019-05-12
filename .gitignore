@@ -6,6 +6,7 @@
 *.iml
 
 target/
+Procfile
 
 # Mac files
 *.DS_Store

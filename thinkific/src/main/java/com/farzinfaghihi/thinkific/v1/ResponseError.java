@@ -1,16 +1,18 @@
 package com.farzinfaghihi.thinkific.v1;
 
+import java.util.List;
+
 public class ResponseError {
 
-    private final ResponseErrorDetail error;
+    private final List<ResponseErrorDetail> errors;
 
-    public ResponseError(ResponseErrorDetail error) {
-        this.error = error;
+    public ResponseError(List<ResponseErrorDetail> errors) {
+        this.errors = errors;
     }
 
     // Getters
 
-    public ResponseErrorDetail getError() {
-        return error;
+    public List<ResponseErrorDetail> getErrors() {
+        return errors;
     }
 }
